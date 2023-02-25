@@ -1,3 +1,5 @@
+import voronin.phone;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,24 +12,13 @@ public class Server {
             System.out.println("Server started");
 
             while (true)
-            try (
-                    Socket socket = server.accept();
-                    BufferedWriter writer =
-                        new BufferedWriter(
-                                new OutputStreamWriter(
-                                        socket.getOutputStream()));
-            BufferedReader reader =
-                new BufferedReader(
-                        new InputStreamReader(
-                                socket.getInputStream()));
-            ) {
-                String request = reader.readLine();
+            try (phone phone = new phone(server)) {
+
+                String request = phone.readLine();
                 System.out.println("request " + request);
                 String response = (int) (Math.random() * 30 - 10) + "";
+                phone.writeLine(response);
                 System.out.println(response);
-                writer.write(response);
-                writer.newLine();
-                writer.flush();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
